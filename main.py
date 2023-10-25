@@ -34,4 +34,3 @@ while True:
     player = "O"
   else:
     player = "X"
-#pokus
