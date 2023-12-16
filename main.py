@@ -105,7 +105,7 @@ while True:
     make_move(player, board)
     print_board(board)
 
-    #check winner after every move
+    # check winner after every move
     winner = check_winner(board)
     if winner:
         print(f"Player {winner} wins!")
@@ -115,3 +115,4 @@ while True:
         print("It's a draw!")
         break
     player = switch_player(player)
+#test
