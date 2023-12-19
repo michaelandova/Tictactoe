@@ -1,13 +1,13 @@
-def initialize_board(row_length, column_length):
-    return [["_" for _ in range(row_length)] for _ in range(column_length)]
+def initialize_board(num_rows, num_columns):
+    return [["_" for _ in range(num_rows)] for _ in range(num_columns)]
 
 
-def is_position_out_of_range(row, column, board):
+def is_position_out_of_range(row, column):
     return row < 0 or row >= len(board) or column < 0 or column >= len(
         board[0])
 
 
-def print_board(board):
+def print_board():
     # print the first row with column numbers
     col_numbers = "  ".join(f"{i:2}" for i in range(len(board[0])))
     print("    " + col_numbers)
@@ -34,21 +34,21 @@ def switch_player(player):
     return "O" if player == "X" else "X"
 
 
-def make_move(player, board):
+def make_move():
     while True:
         position = input(
-            f"Player {player}, choose your position (row and column): ")
+            f"Player {current_player}, choose your position (row and column): ")
 
         if len(position) == 2 and position[0].isdigit(
         ) and position[1].isdigit():
             row, column = int(position[0]), int(position[1])
 
-            if is_position_out_of_range(row, column, board):
+            if is_position_out_of_range(row, column):
                 print("This position is out of range, choose another one")
             elif board[row][column] != "_":
                 print("This position is already taken, choose another one")
             else:
-                board[row][column] = player
+                board[row][column] = current_player
                 break
         else:
             print(
@@ -56,7 +56,7 @@ def make_move(player, board):
             )
 
 
-def check_next(row, column, d_row, d_column, board):
+def check_next(row, column, d_row, d_column):
     player = board[row][column]
     for i in range(1, winning_streak_length):
         next_row = row + i * d_row
@@ -69,50 +69,54 @@ def check_next(row, column, d_row, d_column, board):
     return True
 
 
-def check_winner(board):
+def check_winner():
     for row in range(len(board)):
         for column in range(len(board[0])):
             if board[row][column] != "_" and (
-                    check_next(row, column, 1, 0, board)  # Check rows
-                    or check_next(row, column, 0, 1, board)  # Check columns
-                    or check_next(row, column, 1, 1, board)  # Check diagonal \
-                    or check_next(row, column, 1, -1,
-                                  board)  # Check diagonal /
+                    check_next(row, column, 1, 0)  # Check rows
+                    or check_next(row, column, 0, 1)  # Check columns
+                    or check_next(row, column, 1, 1)  # Check diagonal \
+                    or check_next(row, column, 1, -1)  # Check diagonal /
             ):
                 return board[row][column]  # winner found
     return None  # if no winner
 
 
-def check_draw(board):
+def check_draw():
     for row in range(len(board)):
         for column in range(len(board[0])):
-            if board[row][column] == "_" and check_winner(board) is None:
+            if board[row][column] == "_":
                 return False  # empty cell and no winner was found
+    return True
 
-
-# initialization of the board
-row_length = 5
-column_length = row_length
-winning_streak_length = 3
-board = initialize_board(row_length, column_length)
-
-# the game
-print("Let's play Tic Tac Toe!\n")
-print_board(board)
-player = get_player_sign()
 
 while True:
-    make_move(player, board)
-    print_board(board)
+    # initialization of the board
+    row_length = 3
+    column_length = row_length
+    winning_streak_length = 4
+    board = initialize_board(row_length, column_length)
 
-    # check winner after every move
-    winner = check_winner(board)
-    if winner:
-        print(f"Player {winner} wins!")
+    # the game
+    print("Let's play Tic Tac Toe!\n")
+    print_board()
+    current_player = get_player_sign()
+
+    while True:
+        make_move()
+        print_board()
+
+        # check winner after every move
+        winner = check_winner()
+        if winner:
+            print(f"Player {winner} wins!")
+            break
+        draw = check_draw()
+        if draw is not False:
+            print("It's a draw!")
+            break
+        current_player = switch_player(current_player)
+
+    play_again = input("Do you want to play again? (yes/no): ").lower()
+    if play_again != "yes":
         break
-    draw = check_draw(board)
-    if draw is not False:
-        print("It's a draw!")
-        break
-    player = switch_player(player)
-#test
