@@ -1,8 +1,14 @@
 from random import choice
 from time import sleep
+import os
 
 
-#
+# use this function after move to clear console screen for better clarity
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+# create board(row length = column length)
 def initialize_board():
     return [["_" for _ in range(row_length)] for _ in range(column_length)]
 
@@ -142,16 +148,23 @@ while True:
     computer_player = switch_player(current_player)
 
     while True:
+        clear_screen()
+        print_board()
+
         if game_mode == "PvP":
             make_move()
             print_board()
             # check winner after every move
             winner = check_winner()
             if winner:
+                clear_screen()
+                print_board()
                 print(f"Player {winner} wins!")
                 break
             draw = check_draw()
             if draw is not False:
+                clear_screen()
+                print_board()
                 print("It's a draw!")
                 break
             current_player = switch_player(current_player)
@@ -162,30 +175,37 @@ while True:
 
             winner = check_winner()
             if winner:
+                clear_screen()
+                print_board()
                 print(f"Player {winner} wins!")
                 break
             draw = check_draw()
             if draw is not False:
+                clear_screen()
+                print_board()
                 print("It's a draw!")
                 break
-
-            computer_move()
-            sleep(0.5)
-            print("Computer turn")
-            sleep(1)
+            clear_screen()
             print_board()
 
+            print("Computer turn...")
+            sleep(1)
+
+            computer_move()
             winner = check_winner()
             if winner:
+                clear_screen()
                 print(f"Player {winner} wins!")
                 break
             draw = check_draw()
             if draw is not False:
+                clear_screen()
                 print("It's a draw!")
                 break
 
     play_again = input("Do you want to play again? (yes/no): ").lower()
     if play_again == "yes":
+        clear_screen()
         continue
     else:
         print(":(")
