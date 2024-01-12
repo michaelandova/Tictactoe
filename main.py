@@ -189,7 +189,7 @@ while True:
             print_board()
 
             print("Computer turn...")
-            sleep(1)
+            sleep(1.5)
 
             computer_move()
             winner = check_winner()
